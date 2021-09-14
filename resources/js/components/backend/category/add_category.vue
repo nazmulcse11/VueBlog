@@ -29,14 +29,13 @@
                             <div class="form-group">
                                 <label for="name">Category</label>
                                 <input type="text" class="form-control" id="name" name="name" v-model="form.name" placeholder="Enter Category">
-                                <div v-if="form.errors.has('name')" v-text="form.errors.get('name')" />
+                                <div v-if="form.errors.has('name')" v-html="form.errors.get('name')" />
                             </div>
                             <div class="form-group">
                                 <label for="parent_category">Parent Category</label>
                                 <select class="form-control" id="parent_category" name="parent_category" v-model="form.parent_category">
-                                    <option value=""></option>
                                     <option value="Main Category">Main Category</option>
-                                    <option value="Main Category">Main Category</option>
+                                    <option value="Main Categry">Main Category</option>
                                 </select>
                                 <div v-if="form.errors.has('parent_category')" v-html="form.errors.get('parent_category')" />
                             </div>
@@ -88,12 +87,22 @@ export default {
 
     methods:{
         addCategory:function(){
+            let reset = this;
             this.form.post('/add-category')
             .then(function(data){
                 Toast.fire({
                 icon: 'success',
                 title: 'Category successfully added'
                 })
+                // reset form
+                //  reset.$router.push('categories');
+                reset.form.name = '';
+                reset.form.parent_category = '';
+                reset.form.url = '';
+                reset.form.status = '';
+            })
+            .catch(function(err) {
+                console.log(err)
             })
         }
     },

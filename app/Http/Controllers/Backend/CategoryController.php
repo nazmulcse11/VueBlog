@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Validator;
 
 class CategoryController extends Controller
 {
@@ -12,12 +13,22 @@ class CategoryController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
 
-            $this->validate($request,[
-                'name' => 'required',
+            $rules = [
+    			'name' => 'required',
                 'parent_category' => 'required',
                 'url' => 'required',
                 'status' => 'required',
-            ]);
+    		];
+    		$customMessage = [
+    			'name.required' => 'Name is required',
+    			'parent_category.required' => 'Parent Category is required',
+    			'url.required' => 'Url is required',
+    			'status.required' => 'Status is required',
+    		];
+    		$validator = Validator::make($data,$rules,$customMessage);
+            if($validator->fails()){
+                return response()->json($validator->errors(),422);
+            }
     
             $category = new Category;
             $category->name = $data['name'];

@@ -47,6 +47,7 @@
                                       <td>12 Mar 2021</td>
                                       <td>edit delete</td>
                                   </tr>
+                                  <span>{{ something }}</span>
                               </tbody>
                           </table>
                       </div>
@@ -60,7 +61,12 @@
 
 <script>
 export default {
-
+  name:'categories',
+  computed:{
+     something(){
+        return this.$store.getters.count;
+     }
+  }
 }
 </script>
 
