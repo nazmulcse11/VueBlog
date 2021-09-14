@@ -21,3 +21,4 @@ Auth::routes();
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 Route::get('/{url}', [App\Http\Controllers\HomeController::class, 'index'])->where('path','.*');
+Route::post('/add-category', [App\Http\Controllers\Backend\CategoryController::class, 'addCategory']);
