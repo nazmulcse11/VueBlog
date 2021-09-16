@@ -4752,13 +4752,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'categories',
   computed: {
-    something: function something() {
-      return this.$store.getters.count;
+    categoriesDetails: function categoriesDetails() {
+      return this.$store.getters.categories;
+    }
+  },
+  mounted: function mounted() {
+    this.$store.dispatch('getCategories');
+  },
+  methods: {
+    categoryStatus: function categoryStatus(status) {
+      var data = {
+        1: 'Active',
+        0: 'Inactive'
+      };
+      return data[status];
+    },
+    statusColor: function statusColor(status) {
+      var data = {
+        1: 'bg-success',
+        0: 'bg-danger'
+      };
+      return data[status];
     }
   }
 });
@@ -4846,8 +4863,8 @@ window.Form = vform__WEBPACK_IMPORTED_MODULE_0__["default"]; //Vue Router
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  routes: _routes_routes_js__WEBPACK_IMPORTED_MODULE_2__.routes,
-  mode: 'history'
+  routes: _routes_routes_js__WEBPACK_IMPORTED_MODULE_2__.routes // mode:'history',
+
 }); //sweetalert 2
 
 
@@ -4966,16 +4983,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   state: {
-    count: 30
+    categoryData: []
   },
   getters: {
-    count: function count(state) {
-      return state.count;
+    categories: function categories(state) {
+      return state.categoryData;
     }
   },
-  mutations: {}
+  actions: {
+    getCategories: function getCategories(data) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('get-categories').then(function (response) {
+        data.commit('categories', response.data.categories);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  },
+  mutations: {
+    categories: function categories(state, data) {
+      //  return works fine
+      // return state.categoryData = data; 
+      // without return works fine because directly set value by data
+      state.categoryData = data;
+    }
+  }
 });
 
 /***/ }),
@@ -44106,13 +44145,34 @@ var render = function() {
                 _c("table", { staticClass: "table table-bordered" }, [
                   _vm._m(1),
                   _vm._v(" "),
-                  _c("tbody", [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _vm._m(3),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.something))])
-                  ])
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.categoriesDetails, function(category) {
+                      return _c("tr", [
+                        _c("td", [_vm._v(_vm._s(category.name))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "span",
+                            {
+                              staticClass: "btn badge",
+                              class: _vm.statusColor(category.status)
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm.categoryStatus(category.status))
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(category.created_at))]),
+                        _vm._v(" "),
+                        _vm._m(2, true)
+                      ])
+                    }),
+                    0
+                  )
                 ])
               ])
             ])
@@ -44169,28 +44229,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("td", [_vm._v("Science")]),
+    return _c("td", [
+      _c("a", { staticClass: "btn btn-sm btn-success", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fas fa-edit" })
+      ]),
       _vm._v(" "),
-      _c("td", [_vm._v("Active")]),
-      _vm._v(" "),
-      _c("td", [_vm._v("12 Mar 2021")]),
-      _vm._v(" "),
-      _c("td", [_vm._v("edit delete")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("td", [_vm._v("Science")]),
-      _vm._v(" "),
-      _c("td", [_vm._v("Active")]),
-      _vm._v(" "),
-      _c("td", [_vm._v("12 Mar 2021")]),
-      _vm._v(" "),
-      _c("td", [_vm._v("edit delete")])
+      _c("a", { staticClass: "btn btn-sm btn-danger", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fas fa-times" })
+      ])
     ])
   }
 ]

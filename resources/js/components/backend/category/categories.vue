@@ -35,19 +35,17 @@
                                   </tr>
                               </thead>
                               <tbody>
-                                  <tr>
-                                      <td>Science</td>
-                                      <td>Active</td>
-                                      <td>12 Mar 2021</td>
-                                      <td>edit delete</td>
+                                  
+                                  <tr v-for="category in categoriesDetails">
+                                      <td>{{ category.name }}</td>
+                                      <td><span class="btn badge" :class="statusColor(category.status )">{{ categoryStatus(category.status ) }}</span></td>
+                                      <td>{{ category.created_at }}</td>
+                                      <td>
+                                          <a href="#" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
+                                          <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-times"></i></a>
+                                      </td>
                                   </tr>
-                                  <tr>
-                                      <td>Science</td>
-                                      <td>Active</td>
-                                      <td>12 Mar 2021</td>
-                                      <td>edit delete</td>
-                                  </tr>
-                                  <span>{{ something }}</span>
+                                  
                               </tbody>
                           </table>
                       </div>
@@ -63,13 +61,22 @@
 export default {
   name:'categories',
   computed:{
-     something(){
-        return this.$store.getters.count;
+     categoriesDetails(){
+        return this.$store.getters.categories;
      }
+  },
+  mounted() {
+      this.$store.dispatch('getCategories');
+  },
+  methods:{
+      categoryStatus: function(status){
+          let data = {1:'Active',0:'Inactive'};
+          return data[status];
+      },
+      statusColor: function(status){
+          let data = {1:'bg-success',0:'bg-danger'};
+          return data[status];
+      },
   }
 }
 </script>
-
-<style>
-
-</style>

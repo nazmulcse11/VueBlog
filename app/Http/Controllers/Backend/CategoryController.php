@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use Validator;
+
 
 class CategoryController extends Controller
 {
@@ -37,5 +38,12 @@ class CategoryController extends Controller
             $category->status = $data['status'];
             $category->save();
         }
+    }
+
+    public function getCategories(){
+        $categories = Category::all();
+        return response()->json([
+            'categories'=>$categories
+        ],200);
     }
 }
